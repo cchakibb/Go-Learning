@@ -9,6 +9,4 @@ func main() {
 	var score float64
 
 	fmt.Println(name, age, "years old", isReady, score)
-
-	
 }
