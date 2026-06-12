@@ -1,0 +1,11 @@
+Sans écrire de programme complet, dis-moi ce que 
+chaque ligne fait — channel, valeur, ou erreur :
+
+ch := make(chan string) // Create a channel `ch` of type string
+
+a := ch // Create `a` (a new variable, NOT a new channel) and assign `ch` to it (`a` and `ch` point to the same memory space).
+b := <-ch // Consuming. `b` consumes the value contained in the channel `ch`
+ch <- "hello" // Producing. Insert "hello" into the channel `ch`
+c := <-ch // Consuming. `c` consumes the value contained in `ch`
+close(ch) // We are within the producer. We are closing the `ch` channel so the consumer is aware and doesn't wait.
+for val := range ch {} // We are looping over the channel `ch` and assigning each value contained in `ch` to `val` (same as doing val := <-ch, but in a loop)
