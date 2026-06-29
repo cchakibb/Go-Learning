@@ -24,6 +24,9 @@ func NewPostgresStore(db *sql.DB) *PostgresStore {
 }
 
 func (s *PostgresStore) Add(room Room) error {
+	if room.ID == "" {
+        return errors.New("room ID cannot be empty")
+    }
 	_, err := s.db.Exec(
 		"INSERT INTO rooms (id, name, price) VALUES ($1, $2, $3)",
 		room.ID, room.Name, room.Price,
