@@ -1,0 +1,36 @@
+name: Go Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hotel
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: hoteldb
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+
+      - name: Apply DB schema
+        run: PGPASSWORD=secret psql -h localhost -p 5433 -U hotel -d hoteldb -f schema.sql
+
+      - run: go test ./... -v
